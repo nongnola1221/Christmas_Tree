@@ -24,6 +24,7 @@ const startScene = () => {
 
     const title = document.getElementById('title');
     const subtitle = document.getElementById('subtitle');
+    const treeMessage = document.getElementById('tree-message');
     // Show UI text
     setTimeout(() => {
         title.classList.remove('hidden');
@@ -33,6 +34,10 @@ const startScene = () => {
         subtitle.classList.remove('hidden');
         void subtitle.offsetWidth;
         subtitle.classList.add('visible');
+
+        treeMessage.classList.remove('hidden');
+        void treeMessage.offsetWidth;
+        treeMessage.classList.add('visible');
     }, 500);
 };
 

@@ -126,7 +126,7 @@ canvas {
   text-align: center;
   pointer-events: none;
   width: 100%;
-  max-width: 600px;
+  max-width: none;
   padding: 0 1rem;
   box-sizing: border-box;
 }
@@ -147,7 +147,7 @@ canvas {
 
 #title {
   font-family: "Press Start 2P", "Orbitron", "Fira Code", monospace;
-  font-size: 4rem;
+  font-size: 3rem;
   color: var(--term-color);
   text-shadow: 0 0 10px var(--term-color), 0 0 20px var(--term-color);
   opacity: 0;
@@ -155,6 +155,7 @@ canvas {
   transition: opacity 2s ease, transform 2s ease;
   margin: 0;
   pointer-events: auto;
+  white-space: nowrap;
 }
 
 #title.visible {
@@ -174,6 +175,21 @@ canvas {
 }
 
 #subtitle.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#tree-message {
+  font-family: "Press Start 2P", "Orbitron", "Fira Code", monospace;
+  font-size: 1.3rem;
+  color: var(--neon-gold);
+  text-shadow: 0 0 8px var(--neon-gold);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 1.6s ease, transform 1.6s ease;
+}
+
+#tree-message.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -290,7 +306,7 @@ canvas {
   }
 
   #title {
-    font-size: 2rem;
+    font-size: 1.6rem;
     line-height: 1.2;
   }
 
@@ -298,15 +314,23 @@ canvas {
     font-size: 0.75rem;
   }
 
+  #tree-message {
+    font-size: 0.85rem;
+  }
+
 }
 
 @media screen and (max-width: 480px) {
   #title {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   #subtitle {
     font-size: 0.65rem;
+  }
+
+  #tree-message {
+    font-size: 0.75rem;
   }
 
   .terminal-content {

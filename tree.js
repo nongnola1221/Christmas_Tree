@@ -79,7 +79,7 @@ export class MatrixTree {
       // Project 3D to 2D
       const scale = fov / (fov + rz * 300 + 400); 
       const x2d = rx * 600 * scale + this.width / 2;
-      const y2d = p.y * 600 * scale + this.height / 2 - 50; // Move tree up a bit
+      const y2d = p.y * 600 * scale + this.height / 2 + 10; // Move tree down a bit
 
       // Draw
       const fontSize = Math.floor(14 * scale);
@@ -121,4 +121,3 @@ export class MatrixTree {
     requestAnimationFrame(() => this.animate());
   }
 }
-
