@@ -15,7 +15,6 @@ A hyper-realistic, terminal-based Christmas experience for developers. Simulates
 - **Twinkling Lights** - Colorful Christmas ornaments (red, gold, blue, pink, white)
 - **Physics Snow** - Lightweight particle engine for realistic snowfall
 - **CRT Aesthetics** - Scanlines, screen flicker, and chromatic aberration effects
-- **Global Stats** - Real-time visitor counter via Postgres
 - **Viral Sharing** - Native Web Share API integration
 - **Mobile Responsive** - Optimized for all screen sizes
 

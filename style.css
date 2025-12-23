@@ -178,28 +178,6 @@ canvas {
   transform: translateY(0);
 }
 
-#reset-btn {
-  margin-top: 2rem;
-  background: transparent;
-  border: 1px solid var(--term-color);
-  color: var(--term-color);
-  padding: 1rem 2rem;
-  font-family: "Fira Code", monospace;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.3s ease;
-  pointer-events: auto;
-}
-
-#reset-btn:hover {
-  background: var(--term-color);
-  color: var(--term-bg);
-  box-shadow: 0 0 15px var(--term-color);
-}
-
-#reset-btn.visible {
-  opacity: 1;
-}
 
 /* CRT & Glitch Effects */
 @keyframes scanline {
@@ -289,79 +267,6 @@ canvas {
   display: none !important;
 }
 
-#stats {
-  margin-top: 1rem;
-  font-family: 'Fira Code', monospace;
-  color: var(--neon-gold);
-  font-size: 1.2rem;
-  text-shadow: 0 0 5px var(--neon-gold);
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-#stats.visible {
-  opacity: 1;
-}
-
-.action-buttons {
-  margin-top: 2rem;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-#reset-btn {
-  margin-top: 0; /* Override previous margin */
-}
-
-#share-btn {
-  background: var(--term-color);
-  border: 1px solid var(--term-color);
-  color: var(--term-bg);
-  padding: 1rem 2rem;
-  font-family: 'Fira Code', monospace;
-  font-weight: bold;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.3s ease;
-  pointer-events: auto;
-  box-shadow: 0 0 10px var(--term-color);
-}
-
-#share-btn:hover {
-  background: var(--term-bg);
-  color: var(--term-color);
-  box-shadow: 0 0 20px var(--term-color);
-}
-
-#share-btn.visible {
-  opacity: 1;
-}
-
-#footer {
-  margin-top: 3rem;
-  font-size: 0.8rem;
-  color: #555;
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: auto;
-}
-
-#footer a {
-  color: #777;
-  text-decoration: none;
-  border-bottom: 1px dotted #777;
-  transition: color 0.3s;
-}
-
-#footer a:hover {
-  color: var(--term-color);
-  border-bottom-color: var(--term-color);
-}
-
-#footer.visible {
-  opacity: 1;
-}
 
 /* ==================== MOBILE RESPONSIVE ==================== */
 @media screen and (max-width: 768px) {
@@ -393,28 +298,6 @@ canvas {
     font-size: 0.75rem;
   }
 
-  #stats {
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-  }
-
-  .action-buttons {
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
-  #reset-btn,
-  #share-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-    width: 100%;
-  }
-
-  #footer {
-    margin-top: 2rem;
-    font-size: 0.7rem;
-  }
 }
 
 @media screen and (max-width: 480px) {
