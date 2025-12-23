@@ -1,0 +1,451 @@
+:root {
+  --term-bg: #0a0a0a;
+  --term-color: #00ff41;
+  --term-dim: #008f11;
+  --neon-red: #ff0055;
+  --neon-gold: #ffd700;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--term-bg);
+  overflow: hidden;
+  font-family: "Fira Code", monospace;
+  color: var(--term-color);
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* Terminal Layer */
+.terminal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  padding: 2rem;
+  box-sizing: border-box;
+  background: rgba(10, 10, 10, 0.95);
+  transition: opacity 1s ease-out;
+}
+
+.terminal-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.terminal-content {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  text-shadow: 0 0 5px var(--term-dim);
+}
+
+.prompt {
+  color: #bd93f9; /* Dracula purple-ish */
+  margin-right: 0.5rem;
+}
+
+#logs {
+  margin-top: 1rem;
+  color: #ccc;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse; /* Auto scroll to bottom trick */
+}
+
+.log-line {
+  margin-bottom: 2px;
+}
+
+.log-success {
+  color: var(--term-color);
+}
+.log-warn {
+  color: var(--neon-gold);
+}
+.log-bg {
+  color: #555;
+}
+
+/* Cursor Blink */
+.cursor {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Scene Layer */
+#scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#bg-canvas {
+  z-index: 2;
+}
+#tree-canvas {
+  z-index: 3;
+}
+#snow-canvas {
+  z-index: 4;
+}
+
+/* UI Layer - Top (Title) */
+#ui-top {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+  width: 100%;
+  max-width: 600px;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* UI Layer - Bottom (Buttons) */
+#ui-bottom {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+#title {
+  font-family: "Press Start 2P", "Orbitron", "Fira Code", monospace;
+  font-size: 4rem;
+  color: var(--term-color);
+  text-shadow: 0 0 10px var(--term-color), 0 0 20px var(--term-color);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 2s ease, transform 2s ease;
+  margin: 0;
+  pointer-events: auto;
+}
+
+#title.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#subtitle {
+  margin: 0.75rem 0 0;
+  font-family: "Press Start 2P", "Orbitron", "Fira Code", monospace;
+  font-size: 1.2rem;
+  color: var(--neon-gold);
+  text-shadow: 0 0 6px var(--neon-gold);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 1.6s ease, transform 1.6s ease;
+}
+
+#subtitle.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#reset-btn {
+  margin-top: 2rem;
+  background: transparent;
+  border: 1px solid var(--term-color);
+  color: var(--term-color);
+  padding: 1rem 2rem;
+  font-family: "Fira Code", monospace;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+#reset-btn:hover {
+  background: var(--term-color);
+  color: var(--term-bg);
+  box-shadow: 0 0 15px var(--term-color);
+}
+
+#reset-btn.visible {
+  opacity: 1;
+}
+
+/* CRT & Glitch Effects */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scanline::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.crt::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 999;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.02795 }
+  5% { opacity: 0.04416 }
+  10% { opacity: 0.02325 }
+  15% { opacity: 0.06734 }
+  20% { opacity: 0.01633 }
+  25% { opacity: 0.05341 }
+  30% { opacity: 0.07621 }
+  35% { opacity: 0.05814 }
+  40% { opacity: 0.0308 }
+  45% { opacity: 0.04616 }
+  50% { opacity: 0.08819 }
+  55% { opacity: 0.02704 }
+  60% { opacity: 0.07897 }
+  65% { opacity: 0.02058 }
+  70% { opacity: 0.09638 }
+  75% { opacity: 0.07076 }
+  80% { opacity: 0.01955 }
+  85% { opacity: 0.09315 }
+  90% { opacity: 0.01525 }
+  95% { opacity: 0.045 }
+  100% { opacity: 0.02641 }
+}
+
+/* Chromatic Aberration Text */
+.glitch {
+  position: relative;
+  text-shadow: 2px 0 var(--neon-red), -2px 0 #00ffff;
+  animation: chroma 2s infinite alternate;
+}
+
+@keyframes chroma {
+  0% { text-shadow: 2px 0 var(--neon-red), -2px 0 #00ffff; }
+  100% { text-shadow: -2px 0 var(--neon-red), 2px 0 #00ffff; }
+}
+
+/* Bloom Effect */
+canvas {
+  filter: drop-shadow(0 0 5px var(--term-color));
+}
+
+#tree-canvas {
+  filter: drop-shadow(0 0 10px var(--term-color)) blur(0.5px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+#stats {
+  margin-top: 1rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--neon-gold);
+  font-size: 1.2rem;
+  text-shadow: 0 0 5px var(--neon-gold);
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#stats.visible {
+  opacity: 1;
+}
+
+.action-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+#reset-btn {
+  margin-top: 0; /* Override previous margin */
+}
+
+#share-btn {
+  background: var(--term-color);
+  border: 1px solid var(--term-color);
+  color: var(--term-bg);
+  padding: 1rem 2rem;
+  font-family: 'Fira Code', monospace;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  box-shadow: 0 0 10px var(--term-color);
+}
+
+#share-btn:hover {
+  background: var(--term-bg);
+  color: var(--term-color);
+  box-shadow: 0 0 20px var(--term-color);
+}
+
+#share-btn.visible {
+  opacity: 1;
+}
+
+#footer {
+  margin-top: 3rem;
+  font-size: 0.8rem;
+  color: #555;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: auto;
+}
+
+#footer a {
+  color: #777;
+  text-decoration: none;
+  border-bottom: 1px dotted #777;
+  transition: color 0.3s;
+}
+
+#footer a:hover {
+  color: var(--term-color);
+  border-bottom-color: var(--term-color);
+}
+
+#footer.visible {
+  opacity: 1;
+}
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+@media screen and (max-width: 768px) {
+  .terminal-content {
+    font-size: 0.9rem;
+    padding: 1rem;
+  }
+
+  .terminal-overlay {
+    padding: 1rem;
+  }
+
+  #logs {
+    font-size: 0.75rem;
+    height: 70vh;
+  }
+
+  #ui-layer {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  #title {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  #subtitle {
+    font-size: 0.75rem;
+  }
+
+  #stats {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  #reset-btn,
+  #share-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+
+  #footer {
+    margin-top: 2rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #title {
+    font-size: 1.5rem;
+  }
+
+  #subtitle {
+    font-size: 0.65rem;
+  }
+
+  .terminal-content {
+    font-size: 0.8rem;
+  }
+
+  #logs {
+    font-size: 0.65rem;
+  }
+
+  .prompt {
+    font-size: 0.8rem;
+  }
+}
+
+/* Ensure proper viewport on mobile */
+@supports (-webkit-touch-callout: none) {
+  body, html {
+    height: -webkit-fill-available;
+  }
+  
+  #app {
+    min-height: -webkit-fill-available;
+  }
+}
